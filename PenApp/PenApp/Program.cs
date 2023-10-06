@@ -113,7 +113,6 @@ static void AddPen(IRepository<Pen> penRepository, string penJsonFilePath, Actio
     };
 
     List<Pen> penList = pens.ToList();
-
     penRepository.AddBatch(pens);
     saveFunction(pens, penJsonFilePath);
 }
