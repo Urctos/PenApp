@@ -4,7 +4,7 @@ namespace PenApp.Entities.Extensions;
 
 public static  class EntityExtensions
 {
-    public static void SaveToJson<T>(IEnumerable<T> data,  string filePath) where T : class, IEntity
+    public static void SaveToJson<T>(this IEnumerable<T> data,  string filePath) where T : class, IEntity
     {
         string jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
         File.WriteAllText(filePath, jsonData);

@@ -59,8 +59,8 @@ while (running)
 {
     Console.WriteLine("Wybierz opcję:");
     Console.WriteLine();
-    Console.WriteLine("1. Pokaż listę długopisów");
-    Console.WriteLine("2. Pokaż listę piór wiecznych");
+    Console.WriteLine("1. Dodaj długopis do listy");
+    Console.WriteLine("2. Dodaj pióro wieczne do listy");
     Console.WriteLine("3. Wczytaj listę długopisów");
     Console.WriteLine("4. Wczytaj listę piór wiecznych");
     Console.WriteLine("5. Wyjście");
@@ -70,10 +70,10 @@ while (running)
     switch (imput)
     {
         case "1":
-            //Console.Clear();
-            //AddPen(penRepository, penJsonFilePath, (pens, filePath) => SaveToJson(pens, filePath));
-            //Console.WriteLine();
-            //WriteAllToConsole(penRepository);
+            Console.Clear();
+            AddPen(penRepository, penJsonFilePath);
+            Console.WriteLine();
+            WriteAllToConsole(penRepository);
 
             break;
         case "2":
@@ -102,23 +102,24 @@ while (running)
 
     }
 }
-static void AddPen(IRepository<Pen> penRepository, string penJsonFilePath, Action<IEnumerable<Pen>, string>  saveFunction )
+static void AddPen (IRepository<Pen> penRepository, string penJsonFilePath )
 {
     var pens = new[]
     {
         new Pen {Name = "Parker Jotter Special"},
         new Pen {Name = "IM Brushed Metal GT"},
         new Pen {Name = "Graduate"},
-        new Pen {Name = "dddddddddddd"},
+        new Pen {Name = "DREHGRIFFEL"},
+        new Pen {Name = "SHEAFFER Gift 100 Coffe Brown GT"},
+
     };
 
     List<Pen> penList = pens.ToList();
     penRepository.AddBatch(pens);
-    saveFunction(pens, penJsonFilePath);
+    pens.SaveToJson(penJsonFilePath);
+
 }
-//string penJsonFile = JsonConvert.SerializeObject(penList, Formatting.Indented);
-//File.WriteAllText(penJsonFilePath, penJsonFile);
-//SaveToJson<Pen>(pens, penJsonFilePath);
+
 
 static void AddFountainPen(IWriteRepository<FountainPen> fountainPenRepository, string fountainPenJsonFilePath)
 {
@@ -130,9 +131,8 @@ static void AddFountainPen(IWriteRepository<FountainPen> fountainPenRepository, 
         new FountainPen { Brand = "Waterman", Id = 4, Name = "EXPERT", Price = 549 },
     };
     List<FountainPen> fountainPenList = fountainPens.ToList();
-    string fountainPenJsonFile = JsonConvert.SerializeObject(fountainPenList, Formatting.Indented);
-    File.WriteAllText(fountainPenJsonFilePath, fountainPenJsonFile);
     fountainPenRepository.AddBatch(fountainPens);
+    fountainPens.SaveToJson(fountainPenJsonFilePath);
 }
 
 static void WriteAllToConsole(IReadRepository<IEntity> repository)
