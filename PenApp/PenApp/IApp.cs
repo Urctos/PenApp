@@ -1,5 +1,4 @@
-﻿
-namespace PenApp;
+﻿namespace PenApp;
 
 public interface IApp
 {
