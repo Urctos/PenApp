@@ -4,10 +4,7 @@ using PenApp.Components.XmlReader;
 using PenApp.Data;
 using PenApp.Data.Entities;
 
-
 namespace PenApp;
-
-
 
 public class App : IApp
 {
@@ -30,8 +27,6 @@ public class App : IApp
 
         //InsertData();
     }
-
-
 
     private void InsertData()
     {
