@@ -16,7 +16,6 @@ namespace PenApp.Components.CsvReader.Extensions
             {
                 var columns = line.Split(',');
 
-
                 yield return new PenFromCsv
                 {
                     Name = columns[0],
@@ -25,7 +24,6 @@ namespace PenApp.Components.CsvReader.Extensions
                     Price = decimal.Parse(columns[3]),
                     TotalSales = decimal.Parse(columns[4])
                 };
-
             }
         }
     }

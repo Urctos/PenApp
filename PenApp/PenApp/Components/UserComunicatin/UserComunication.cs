@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using PenApp.Components.DataBaseComunication;
 using PenApp.Data;
 using PenApp.Data.Entities;
 
@@ -8,20 +9,26 @@ namespace PenApp.Components.UserComunication;
 public class UserComunication : IUserComunication
 {
     private readonly PenAppDbContext _penAppDbContext;
-    //private readonly IEditable _editable;
-    //private readonly IItemWithPrice _itemWithPrice;
+    private readonly IReadManager<Pen> _penReadManager;
+    private readonly IReadManager<FountainPen> _fountainPenReadManager;
+    private readonly IEditManager<Pen> _penEditManager;
+    private readonly IEditManager<FountainPen> _fountainPenEditManager;
 
 
-    public UserComunication(PenAppDbContext penAppDbContext)
+    public UserComunication(PenAppDbContext penAppDbContext
+        , IReadManager<Pen> penReadManager, IReadManager<FountainPen> fountainPenReadManager
+        , IEditManager<Pen> penEditManager, IEditManager<FountainPen> fountainPenEditManager)
     {
         _penAppDbContext = penAppDbContext;
+        _penReadManager = penReadManager;
+        _fountainPenReadManager = fountainPenReadManager;
+        _penEditManager = penEditManager;
+        _fountainPenEditManager = fountainPenEditManager;
     }
-
 
     public void Comunication()
     {
         DisplayMenu();
-
         bool running = true;
 
         while (running)
@@ -49,7 +56,6 @@ public class UserComunication : IUserComunication
         }
     }
 
-
     private void PensSubmenu()
     {
         bool backToMain = false;
@@ -64,24 +70,32 @@ public class UserComunication : IUserComunication
             Console.WriteLine("4. Edytój wybrany długopis");
             Console.WriteLine("5. Wróć do menu głównego");
             Console.WriteLine("********************************************************");
-
+            
             string input = Console.ReadLine();
 
             switch (input)
             {
                 case "1":
-                    ReadAllFromDb(_penAppDbContext.Pens, pen => $"\t{pen.GetType().Name}: {pen.Id}: {pen.Name}: {pen.Brand}: {pen.Color}: {pen.Price}: {pen.Id}: {pen.TotalSales}"); // Funkcja wyświetlająca długopisy
+                    _penReadManager.ReadAllFromDb(_penAppDbContext.Pens, pen => $"\t{pen.GetType().Name}: {pen.Id}: " +
+                    $"{pen.Name}: {pen.Brand}: {pen.Color}: {pen.Price}: {pen.Id}: {pen.TotalSales}"); 
                     break;
                 case "2":
-                    ReadGroupedItemsFromDb<Pen>(
-                        pen => pen.Brand,
-                        pen => $"\t{pen.Name}: {pen.Price}: {pen.TotalSales}");
+                    _penReadManager.ReadGroupedItemsFromDb(pen => pen.Brand, pen => $"\t{pen.Name}: {pen.Price}: {pen.TotalSales}");
                     break;
                 case "3":
-                    SortAllItemsByPrice<Pen>();
+                    _penReadManager.SortAllItemsByPrice();
                     break;
                 case "4":
-                    EditItemFromDb<Pen>();
+                    Console.WriteLine($"Podaj ID obiektu {_penEditManager.GetType().GenericTypeArguments[0].Name} do edycji:");
+                    if (int.TryParse(Console.ReadLine(), out int itemId))
+                    {
+                        var penToEdit = _penAppDbContext.Pens.Find(itemId);
+                        _penEditManager.EditItemFromDb(penToEdit);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Nieprawidłowe ID {_penEditManager.GetType().GenericTypeArguments[0].Name}. Edycja anulowana.");
+                    }
                     break;
                 case "5":
                     backToMain = true;
@@ -116,18 +130,27 @@ public class UserComunication : IUserComunication
             switch (input)
             {
                 case "1":
-                    ReadAllFromDb(_penAppDbContext.FountainPens, fountainPen => $"\t{fountainPen.GetType().Name}: {fountainPen.Id}: {fountainPen.Name}: {fountainPen.Brand}: {fountainPen.Color}: {fountainPen.Price}: {fountainPen.Id}: {fountainPen.TotalSales}");
+                    _fountainPenReadManager.ReadAllFromDb(_penAppDbContext.FountainPens, fountainPen => $"\t{fountainPen.GetType().Name}: {fountainPen.Id}: " +
+                    $"{fountainPen.Name}: {fountainPen.Brand}: {fountainPen.Color}: {fountainPen.Price}: {fountainPen.Id}: {fountainPen.TotalSales}");
+                  
                     break;
                 case "2":
-                    ReadGroupedItemsFromDb<FountainPen>(
-                        fountainPen => fountainPen.Brand,
-                        fountainPen => $"\t{fountainPen.Name}: {fountainPen.Price}: {fountainPen.TotalSales}");                    
+                    _fountainPenReadManager.ReadGroupedItemsFromDb(fountainPen => fountainPen.Brand, fountainPen => $"\t{fountainPen.Name}: {fountainPen.Price}: {fountainPen.TotalSales}");                    
                     break;
                 case "3":
-                    SortAllItemsByPrice<FountainPen>();
+                    _fountainPenReadManager.SortAllItemsByPrice();
                     break;
                 case "4":
-                    EditItemFromDb<FountainPen>();
+                    Console.WriteLine($"Podaj ID obiektu {_fountainPenEditManager.GetType().GenericTypeArguments[0].Name} do edycji:");
+                    if (int.TryParse(Console.ReadLine(), out int fountainPenItemId))
+                    {
+                        var fountainPenToEdit = _penAppDbContext.FountainPens.Find(fountainPenItemId);
+                        _fountainPenEditManager.EditItemFromDb(fountainPenToEdit);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Nieprawidłowe ID {_fountainPenEditManager.GetType().GenericTypeArguments[0].Name}. Edycja anulowana.");
+                    }
                     break;
                 case "5":
                     backToMain = true;
@@ -140,100 +163,6 @@ public class UserComunication : IUserComunication
             }
         }
     }
-
-
-    private void ReadAllFromDb<T>(DbSet<T> dbSet, Func<T, string> displayFunc) where T : class
-    {
-        var itemsFromDb = dbSet.ToList();
-
-        foreach (var itemFromDb in itemsFromDb)
-        {
-            var displayString = displayFunc(itemFromDb);
-            Console.WriteLine(displayString);
-        }
-    }
-
-
-    private void ReadGroupedItemsFromDb<T>(Func<T, object> groupByFunc, Func<T, string> displayFunc) where T : class
-    {
-        var groups = _penAppDbContext
-            .Set<T>()
-            .GroupBy(groupByFunc)
-            .Select(x => new
-            {
-                Name = x.Key,
-                Items = x.ToList()
-            })
-            .ToList();
-
-        foreach (var group in groups)
-        {
-            Console.WriteLine(group.Name);
-            Console.WriteLine("=========");
-            foreach (var item in group.Items)
-            {
-                Console.WriteLine(displayFunc(item));
-            }
-            Console.WriteLine();
-        }
-    }
-
-
-
-    private void SortAllItemsByPrice<T>() where T : EntityBase, IItemWithPrice
-    {
-        var itemsFromDb = _penAppDbContext.Set<T>().OrderBy(item => ((IItemWithPrice)item).Price).ToList();
-
-        foreach (var itemFromDb in itemsFromDb)
-        {
-            Console.WriteLine($"{itemFromDb.Id}: {((IItem)itemFromDb).Name}: {((IItem)itemFromDb).Brand}: {((IItem)itemFromDb).Color}: {((IItemWithPrice)itemFromDb).Price}: {((IItem)itemFromDb).TotalSales}");
-        }
-    }
-
-
-    private T ReadItemFromDb<T>(int id) where T : class
-    {
-        return _penAppDbContext.Set<T>().Find(id);
-    }
-
-    private void EditItemFromDb<T>() where T : class, IEditable
-    {
-        Console.WriteLine($"Podaj ID obiektu {typeof(T).Name} do edycji:");
-        if (int.TryParse(Console.ReadLine(), out int itemId))
-        {
-            var itemFromDb = _penAppDbContext.Set<T>().Find(itemId);
-
-            if (itemFromDb != null)
-            {
-                Console.WriteLine("Podaj nową nazwę:");
-                itemFromDb.UpdateName(Console.ReadLine());
-
-                Console.WriteLine("Podaj nową cenę:");
-                if (decimal.TryParse(Console.ReadLine(), out decimal price))
-                {
-                    itemFromDb.UpdatePrice(price);
-                    _penAppDbContext.SaveChanges();
-                    Console.WriteLine($"{typeof(T).Name} został zaktualizowany.");
-                }
-                else
-                {
-                    Console.WriteLine("Nieprawidłowa cena. Edycja anulowana.");
-                }
-            }
-            else
-            {
-                Console.Clear();
-                DisplayMenu();
-                Console.WriteLine($"{typeof(T).Name} o podanym identyfikatorze nie istnieje.");
-            }
-        }
-        else
-        {
-            Console.WriteLine($"Nieprawidłowe ID {typeof(T).Name}. Edycja anulowana.");
-        }
-    }
-
-
 
     public void DisplayMenu()
     {

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PenApp;
 using PenApp.Components.CsvReader;
+using PenApp.Components.DataBaseComunication;
 using PenApp.Components.DataProviders;
 using PenApp.Components.UserComunication;
 using PenApp.Components.XmlReader;
@@ -24,7 +25,11 @@ services.AddSingleton<IItemWithPrice, Pen>();
 services.AddSingleton<IItemWithPrice, FountainPen>();
 services.AddSingleton<IItem, Pen>();
 services.AddSingleton<IItem, FountainPen>();
+services.AddSingleton(typeof(IReadManager<>), typeof(ReadManager<>));
+services.AddScoped<IEditManager<Pen>, EditManager<Pen>>();
+services.AddScoped<IEditManager<FountainPen>, EditManager<FountainPen>>();
 services.AddDbContext<PenAppDbContext>(options => options
+
     .UseSqlServer("Data Source=DESKTOP-DNO5S49\\SQLEXPRESS;Initial Catalog=PenAppStorage;Integrated Security=True;TrustServerCertificate=true"));
 
 var serviceProvider = services.BuildServiceProvider();

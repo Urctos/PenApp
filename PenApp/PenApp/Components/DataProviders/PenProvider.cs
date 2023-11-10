@@ -6,7 +6,6 @@ namespace PenApp.Components.DataProviders;
 public class PenProvider : IPenProvider
 {
     private IRepository<Pen> _penRepository;
-
     public PenProvider(IRepository<Pen> penRepository)
     {
         _penRepository = penRepository;
@@ -26,7 +25,6 @@ public class PenProvider : IPenProvider
     {
         var pens = _penRepository.GetAll();
         return pens.Select(x => x.Price).Min();
-
     }
 
     public List<Pen> GetSpecificColumn()
@@ -40,7 +38,6 @@ public class PenProvider : IPenProvider
         }).ToList();
 
         return list;
-
     }
 
     public List<string> GetUniquePenColors()

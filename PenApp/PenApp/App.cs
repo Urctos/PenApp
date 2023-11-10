@@ -26,11 +26,9 @@ public class App : IApp
 
     public void Run()
     {
-
         _userComunication.Comunication();
 
         //InsertData();
-
     }
 
 
@@ -43,36 +41,28 @@ public class App : IApp
         {
             _penAppDbContext.Pens.Add(new Pen()
             {
-
                 Name = pen.Name,
                 Brand = pen.Brand,
                 Color = pen.Color,
                 Price = pen.Price,
                 TotalSales = pen.TotalSales
-
             });
-
         }
-
 
         var foutainPens = _csvReader.ProcessFountainPenFromCsv("Resources\\Files\\foutainPen.csv");
 
         foreach (var fountainPen in foutainPens)
         {
             _penAppDbContext.FountainPens.Add(new FountainPen()
-            {
-
+            { 
                 Name = fountainPen.Name,
                 Brand = fountainPen.Brand,
                 Color = fountainPen.Color,
                 Price = fountainPen.Price,
                 TotalSales = fountainPen.TotalSales
-
             });
         }
-
         _penAppDbContext.SaveChanges();
     }
-
 }
 

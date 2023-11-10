@@ -28,6 +28,5 @@ namespace PenApp.Data.Entities
         {
             this.Price = newPrice;
         }
-
     }
 }
