@@ -1,21 +1,21 @@
 ﻿using PenApp.Data;
 using PenApp.Data.Entities;
+using PenApp.Data.Repositories;
 
 namespace PenApp.Components.DataBaseComunication;
 
-public class EditManager<T> : IEditManager<T> where T : class, IEditable
+public class EditManager<T> : IEditManager<T> where T : class, IEditable, new()
 {
-    private readonly PenAppDbContext _penAppDbContext;
+    private readonly IRepository<T> _repository;
 
-    public EditManager(PenAppDbContext penAppDbContext)
+    public EditManager(IRepository<T> repository)
     {
-        _penAppDbContext = penAppDbContext;
+        _repository = repository;
     }
 
     public void EditItemFromDb(T item)
     {
-        var itemFromDb = _penAppDbContext.Set<T>()
-            .Find(item.Id);
+        var itemFromDb = _repository.GetById(item.Id);
 
         if (itemFromDb != null)
         {
@@ -26,7 +26,7 @@ public class EditManager<T> : IEditManager<T> where T : class, IEditable
             if (decimal.TryParse(Console.ReadLine(), out decimal price))
             {
                 itemFromDb.UpdatePrice(price);
-                _penAppDbContext.SaveChanges();
+               _repository.Save();
                 Console.WriteLine($"{typeof(T).Name} został zaktualizowany.");
             }
             else

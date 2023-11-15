@@ -1,6 +1,5 @@
 ﻿using PenApp.Components.CsvReader;
 using PenApp.Components.UserComunication;
-using PenApp.Components.XmlReader;
 using PenApp.Data;
 using PenApp.Data.Entities;
 
@@ -10,12 +9,10 @@ public class App : IApp
 {
     private readonly ICsvReader _csvReader;
     private readonly IUserComunication _userComunication;
-    private readonly IXmlReader _xmlReader;
     private readonly PenAppDbContext _penAppDbContext;
-    public App(ICsvReader csvReader, IXmlReader xmlReader, IUserComunication userComunication, PenAppDbContext penAppDbContext)
+    public App(ICsvReader csvReader, IUserComunication userComunication, PenAppDbContext penAppDbContext)
     {
         _csvReader = csvReader;
-        _xmlReader = xmlReader;
         _userComunication = userComunication;
         _penAppDbContext = penAppDbContext;
         _penAppDbContext.Database.EnsureCreated();
@@ -23,9 +20,9 @@ public class App : IApp
 
     public void Run()
     {
-        _userComunication.Comunication();
+        //InsertData(); d
 
-        //InsertData();
+        _userComunication.Comunication();
     }
 
     private void InsertData()

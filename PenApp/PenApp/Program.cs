@@ -6,7 +6,6 @@ using PenApp.Components.CsvReader;
 using PenApp.Components.DataBaseComunication;
 using PenApp.Components.DataProviders;
 using PenApp.Components.UserComunication;
-using PenApp.Components.XmlReader;
 using PenApp.Data;
 using PenApp.Data.Entities;
 using PenApp.Data.Repositories;
@@ -17,7 +16,6 @@ services.AddSingleton<IApp, App>();
 services.AddSingleton<IRepository<Pen>, ListRepository<Pen>>();
 services.AddSingleton<IPenProvider, PenProvider>();
 services.AddSingleton<ICsvReader, CsvReader>();
-services.AddSingleton<IXmlReader, XmlReader>();
 services.AddSingleton<IUserComunication, UserComunication>();
 services.AddSingleton<IEditable, Pen>();
 services.AddSingleton<IEditable, FountainPen>();
@@ -28,6 +26,10 @@ services.AddSingleton<IItem, FountainPen>();
 services.AddSingleton(typeof(IReadManager<>), typeof(ReadManager<>));
 services.AddScoped<IEditManager<Pen>, EditManager<Pen>>();
 services.AddScoped<IEditManager<FountainPen>, EditManager<FountainPen>>();
+//services.AddScoped<SqlRepository<Pen>>();
+//services.AddScoped<SqlRepository<FountainPen>>();
+services.AddScoped<IRepository<Pen>, SqlRepository<Pen>>();
+services.AddScoped<IRepository<FountainPen>, SqlRepository<FountainPen>>();
 services.AddDbContext<PenAppDbContext>(options => options
 
     .UseSqlServer("Data Source=DESKTOP-DNO5S49\\SQLEXPRESS;Initial Catalog=PenAppStorage;Integrated Security=True;TrustServerCertificate=true"));

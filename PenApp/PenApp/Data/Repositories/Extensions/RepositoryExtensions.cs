@@ -27,6 +27,5 @@ namespace PenApp.Data.Repositories.Extensions
             }
             repository.Save();
         }
-
     }
 }

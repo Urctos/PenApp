@@ -3,23 +3,25 @@ using Microsoft.EntityFrameworkCore.Query.Internal;
 using PenApp.Components.DataBaseComunication;
 using PenApp.Data;
 using PenApp.Data.Entities;
+using PenApp.Data.Repositories;
 
 namespace PenApp.Components.UserComunication;
 
 public class UserComunication : IUserComunication
 {
-    private readonly PenAppDbContext _penAppDbContext;
+    private readonly IRepository<Pen> _penRepository;
+    private readonly IRepository<FountainPen> _fountainPenRepository;
     private readonly IReadManager<Pen> _penReadManager;
     private readonly IReadManager<FountainPen> _fountainPenReadManager;
     private readonly IEditManager<Pen> _penEditManager;
     private readonly IEditManager<FountainPen> _fountainPenEditManager;
 
-
-    public UserComunication(PenAppDbContext penAppDbContext
+    public UserComunication(IRepository<Pen> penRepository, IRepository<FountainPen> fountainPenRepository
         , IReadManager<Pen> penReadManager, IReadManager<FountainPen> fountainPenReadManager
         , IEditManager<Pen> penEditManager, IEditManager<FountainPen> fountainPenEditManager)
     {
-        _penAppDbContext = penAppDbContext;
+        _penRepository = penRepository;
+        _fountainPenRepository = fountainPenRepository;
         _penReadManager = penReadManager;
         _fountainPenReadManager = fountainPenReadManager;
         _penEditManager = penEditManager;
@@ -59,7 +61,6 @@ public class UserComunication : IUserComunication
     private void PensSubmenu()
     {
         bool backToMain = false;
-
         while (!backToMain)
         {
             Console.WriteLine("\n******************** MENU DŁUGOPISÓW ********************");
@@ -76,7 +77,7 @@ public class UserComunication : IUserComunication
             switch (input)
             {
                 case "1":
-                    _penReadManager.ReadAllFromDb(_penAppDbContext.Pens, pen => $"\t{pen.GetType().Name}: {pen.Id}: " +
+                    _penReadManager.ReadAllFromDb(_penRepository, pen => $"\t{pen.GetType().Name}: {pen.Id}: " +
                     $"{pen.Name}: {pen.Brand}: {pen.Color}: {pen.Price}: {pen.Id}: {pen.TotalSales}"); 
                     break;
                 case "2":
@@ -89,7 +90,7 @@ public class UserComunication : IUserComunication
                     Console.WriteLine($"Podaj ID obiektu {_penEditManager.GetType().GenericTypeArguments[0].Name} do edycji:");
                     if (int.TryParse(Console.ReadLine(), out int itemId))
                     {
-                        var penToEdit = _penAppDbContext.Pens.Find(itemId);
+                        var penToEdit = _penRepository.GetById(itemId);
                         _penEditManager.EditItemFromDb(penToEdit);
                     }
                     else
@@ -113,7 +114,6 @@ public class UserComunication : IUserComunication
     private void FountainPensSubmenu()
     {
         bool backToMain = false;
-
         while (!backToMain)
         {
             Console.WriteLine("\n******************** MENU PIÓR WIECZNYCH ********************");
@@ -130,7 +130,7 @@ public class UserComunication : IUserComunication
             switch (input)
             {
                 case "1":
-                    _fountainPenReadManager.ReadAllFromDb(_penAppDbContext.FountainPens, fountainPen => $"\t{fountainPen.GetType().Name}: {fountainPen.Id}: " +
+                    _fountainPenReadManager.ReadAllFromDb(_fountainPenRepository, fountainPen => $"\t{fountainPen.GetType().Name}: {fountainPen.Id}: " +
                     $"{fountainPen.Name}: {fountainPen.Brand}: {fountainPen.Color}: {fountainPen.Price}: {fountainPen.Id}: {fountainPen.TotalSales}");
                   
                     break;
@@ -144,7 +144,7 @@ public class UserComunication : IUserComunication
                     Console.WriteLine($"Podaj ID obiektu {_fountainPenEditManager.GetType().GenericTypeArguments[0].Name} do edycji:");
                     if (int.TryParse(Console.ReadLine(), out int fountainPenItemId))
                     {
-                        var fountainPenToEdit = _penAppDbContext.FountainPens.Find(fountainPenItemId);
+                        var fountainPenToEdit = _fountainPenRepository.GetById(fountainPenItemId);
                         _fountainPenEditManager.EditItemFromDb(fountainPenToEdit);
                     }
                     else

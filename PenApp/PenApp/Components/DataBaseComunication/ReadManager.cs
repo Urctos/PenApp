@@ -1,21 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PenApp.Data;
 using PenApp.Data.Entities;
+using PenApp.Data.Repositories;
 
 namespace PenApp.Components.DataBaseComunication;
 
-public class ReadManager<T> : IReadManager<T> where T : EntityBase, IItemWithPrice
+public class ReadManager<T> : IReadManager<T> where T : EntityBase, IItemWithPrice, new()
 {
-    private readonly PenAppDbContext _penAppDbContext;
+    private readonly IRepository<T> _repository;
 
-    public ReadManager(PenAppDbContext penAppDbContext)
+    public ReadManager(IRepository<T> repository)
     {
-        _penAppDbContext = penAppDbContext;
+        _repository = repository;
     }
-
-    public void ReadAllFromDb(DbSet<T> dbSet, Func<T, string> displayFunc) 
+    public void ReadAllFromDb(IRepository<T> repository, Func<T, string> displayFunc) 
     {
-        var itemsFromDb = dbSet.ToList();
+        var itemsFromDb = _repository.GetAll();
 
         foreach (var itemFromDb in itemsFromDb)
         {
@@ -26,8 +26,8 @@ public class ReadManager<T> : IReadManager<T> where T : EntityBase, IItemWithPri
 
     public void ReadGroupedItemsFromDb(Func<T, object> groupByFunc, Func<T, string> displayFunc)
     {
-        var groups = _penAppDbContext
-            .Set<T>()
+        var groups = _repository
+            .GetAll()
             .GroupBy(groupByFunc)
             .Select(x => new
             {
@@ -50,7 +50,9 @@ public class ReadManager<T> : IReadManager<T> where T : EntityBase, IItemWithPri
 
     public void SortAllItemsByPrice() 
     {
-        var itemsFromDb = _penAppDbContext.Set<T>().OrderBy(item => ((IItemWithPrice)item).Price).ToList();
+        var itemsFromDb = _repository.GetAll()
+            .OrderBy(item => ((IItemWithPrice)item).Price)
+            .ToList();
 
         foreach (var itemFromDb in itemsFromDb)
         {

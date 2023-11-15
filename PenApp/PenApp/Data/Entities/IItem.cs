@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace PenApp.Data.Entities
 {
     public interface IItem
-    {
-        
+    {       
         string Name { get; set; }
         string? Brand { get; set; }
         string Color { get; set; }

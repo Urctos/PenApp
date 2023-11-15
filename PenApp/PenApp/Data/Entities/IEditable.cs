@@ -1,8 +1,7 @@
 ﻿namespace PenApp.Data.Entities
 {
-    public interface IEditable
+    public interface IEditable : IEntity
     {   
-        int Id { get; set; }
         void UpdateName(string newName);
         void UpdatePrice(decimal newPrice);
     }
