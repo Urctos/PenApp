@@ -20,10 +20,11 @@ public class App : IApp
 
     public void Run()
     {
-        //InsertData(); d
-
+        //InsertData(); 
         _userComunication.Comunication();
     }
+
+
 
     private void InsertData()
     {
