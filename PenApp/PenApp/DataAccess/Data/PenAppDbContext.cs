@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PenApp.Data.Entities;
+using PenApp.DataAccess.Data.Entities;
 
-namespace PenApp.Data
+namespace PenApp.DataAccess.Data
 {
     public class PenAppDbContext : DbContext 
     {

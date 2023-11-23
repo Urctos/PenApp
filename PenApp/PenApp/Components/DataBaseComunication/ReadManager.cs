@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PenApp.Data;
-using PenApp.Data.Entities;
-using PenApp.Data.Repositories;
+using PenApp.DataAccess.Data.Repositories;
+using PenApp.DataAccess.Data.Entities;
 
 namespace PenApp.Components.DataBaseComunication;
 

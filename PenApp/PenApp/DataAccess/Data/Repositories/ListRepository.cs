@@ -1,6 +1,6 @@
-﻿using PenApp.Data.Entities;
+﻿using PenApp.DataAccess.Data.Entities;
 
-namespace PenApp.Data.Repositories
+namespace PenApp.DataAccess.Data.Repositories
 {
     public class ListRepository<T> : IRepository<T> where T : class, IEntity, new()
     {

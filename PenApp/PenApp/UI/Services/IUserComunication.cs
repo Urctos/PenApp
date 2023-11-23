@@ -1,4 +1,4 @@
-﻿namespace PenApp.Components.UserComunication;
+﻿namespace PenApp.UI.Services;
 
 public interface IUserComunication
 {

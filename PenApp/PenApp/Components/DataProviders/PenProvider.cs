@@ -1,5 +1,5 @@
-﻿using PenApp.Data.Entities;
-using PenApp.Data.Repositories;
+﻿using PenApp.DataAccess.Data.Entities;
+using PenApp.DataAccess.Data.Repositories;
 
 namespace PenApp.Components.DataProviders;
 

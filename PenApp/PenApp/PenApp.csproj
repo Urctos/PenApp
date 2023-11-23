@@ -15,10 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\Files\foutainPen.csv">
+    <None Update="DataAccess\Resources\Files\foutainPen.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Files\pen.csv">
+    <None Update="DataAccess\Resources\Files\pen.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

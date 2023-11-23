@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using PenApp.Data.Entities;
+using PenApp.DataAccess.Data.Entities;
 
 namespace PenApp.Data.Entities.Extensions;
 

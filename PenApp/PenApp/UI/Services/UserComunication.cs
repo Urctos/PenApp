@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using PenApp.Components.DataBaseComunication;
 using PenApp.Data;
-using PenApp.Data.Entities;
-using PenApp.Data.Repositories;
+using PenApp.DataAccess.Data.Entities;
+using PenApp.DataAccess.Data.Repositories;
 
-namespace PenApp.Components.UserComunication;
+namespace PenApp.UI.Services;
 
 public class UserComunication : IUserComunication
 {
@@ -45,7 +45,7 @@ public class UserComunication : IUserComunication
                     break;
                 case "2":
                     Console.Clear();
-                    FountainPensSubmenu();                    
+                    FountainPensSubmenu();
                     break;
                 case "3":
                     running = false;
@@ -71,14 +71,14 @@ public class UserComunication : IUserComunication
             Console.WriteLine("4. Edytój wybrany długopis");
             Console.WriteLine("5. Wróć do menu głównego");
             Console.WriteLine("********************************************************");
-            
+
             string input = Console.ReadLine();
 
             switch (input)
             {
                 case "1":
                     _penReadManager.ReadAllFromDb(_penRepository, pen => $"\t{pen.GetType().Name}: {pen.Id}: " +
-                    $"{pen.Name}: {pen.Brand}: {pen.Color}: {pen.Price}: {pen.Id}: {pen.TotalSales}"); 
+                    $"{pen.Name}: {pen.Brand}: {pen.Color}: {pen.Price}: {pen.Id}: {pen.TotalSales}");
                     break;
                 case "2":
                     _penReadManager.ReadGroupedItemsFromDb(pen => pen.Brand, pen => $"\t{pen.Name}: {pen.Price}: {pen.TotalSales}");
@@ -132,10 +132,10 @@ public class UserComunication : IUserComunication
                 case "1":
                     _fountainPenReadManager.ReadAllFromDb(_fountainPenRepository, fountainPen => $"\t{fountainPen.GetType().Name}: {fountainPen.Id}: " +
                     $"{fountainPen.Name}: {fountainPen.Brand}: {fountainPen.Color}: {fountainPen.Price}: {fountainPen.Id}: {fountainPen.TotalSales}");
-                  
+
                     break;
                 case "2":
-                    _fountainPenReadManager.ReadGroupedItemsFromDb(fountainPen => fountainPen.Brand, fountainPen => $"\t{fountainPen.Name}: {fountainPen.Price}: {fountainPen.TotalSales}");                    
+                    _fountainPenReadManager.ReadGroupedItemsFromDb(fountainPen => fountainPen.Brand, fountainPen => $"\t{fountainPen.Name}: {fountainPen.Price}: {fountainPen.TotalSales}");
                     break;
                 case "3":
                     _fountainPenReadManager.SortAllItemsByPrice();

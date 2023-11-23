@@ -1,4 +1,4 @@
-﻿using PenApp.Data.Entities;
+﻿using PenApp.DataAccess.Data.Entities;
 
 namespace PenApp.Components.DataProviders;
 

@@ -1,4 +1,4 @@
-﻿using PenApp.Data.Entities;
+﻿using PenApp.DataAccess.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

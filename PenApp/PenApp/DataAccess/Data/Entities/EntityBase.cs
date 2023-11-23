@@ -1,4 +1,4 @@
-﻿namespace PenApp.Data.Entities;
+﻿namespace PenApp.DataAccess.Data.Entities;
 
 public abstract class EntityBase : IEntity
 {

@@ -1,4 +1,4 @@
-﻿using PenApp.DataAccess.Data.Entities;
+﻿using PenApp.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace PenApp.Components.DataBaseComunication;
 
-public interface IEditManager<T> where T : class, IEditable
-{
-    void EditItemFromDb(T item);
+public interface IInsertDataManager
+{ 
+    void InsertData();
 }
 

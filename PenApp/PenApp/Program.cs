@@ -1,15 +1,14 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PenApp;
 using PenApp.Components.CsvReader;
 using PenApp.Components.DataBaseComunication;
 using PenApp.Components.DataProviders;
-using PenApp.Components.UserComunication;
-using PenApp.Data;
-using PenApp.Data.Entities;
-using PenApp.Data.Repositories;
-
+using PenApp.DataAccess.Data;
+using PenApp.DataAccess.Data.Entities;
+using PenApp.DataAccess.Data.Repositories;
+using PenApp.UI;
+using PenApp.UI.Services;
 
 var services = new ServiceCollection();
 services.AddSingleton<IApp, App>();
@@ -26,8 +25,7 @@ services.AddSingleton<IItem, FountainPen>();
 services.AddSingleton(typeof(IReadManager<>), typeof(ReadManager<>));
 services.AddScoped<IEditManager<Pen>, EditManager<Pen>>();
 services.AddScoped<IEditManager<FountainPen>, EditManager<FountainPen>>();
-//services.AddScoped<SqlRepository<Pen>>();
-//services.AddScoped<SqlRepository<FountainPen>>();
+services.AddScoped<IInsertDataManager, InsertDataManager>();
 services.AddScoped<IRepository<Pen>, SqlRepository<Pen>>();
 services.AddScoped<IRepository<FountainPen>, SqlRepository<FountainPen>>();
 services.AddDbContext<PenAppDbContext>(options => options

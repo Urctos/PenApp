@@ -1,4 +1,4 @@
-﻿namespace PenApp;
+﻿namespace PenApp.UI;
 
 public interface IApp
 {

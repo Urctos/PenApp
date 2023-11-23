@@ -1,6 +1,6 @@
-﻿using PenApp.Data.Entities;
+﻿using PenApp.DataAccess.Data.Entities;
 
-namespace PenApp.Data.Repositories
+namespace PenApp.DataAccess.Data.Repositories
 {
     public interface IWriteRepository<in T> where T : class, IEntity
     {

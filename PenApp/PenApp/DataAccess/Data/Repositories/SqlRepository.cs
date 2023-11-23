@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PenApp.Data.Entities;
-using PenApp.Data.Repositories;
-using System.Xml.Linq;
+using PenApp.DataAccess.Data.Entities;
 
-
-namespace PenApp.Data.Repositories;
+namespace PenApp.DataAccess.Data.Repositories;
 
 public class SqlRepository<T> : IRepository<T> 
     where T : class, IEntity, new()
@@ -17,7 +14,8 @@ public class SqlRepository<T> : IRepository<T>
     public SqlRepository(PenAppDbContext penAppDbContext)
     {
         _penAppDbContext = penAppDbContext;
-        _dbSet = _penAppDbContext.Set<T>();     
+        _dbSet = _penAppDbContext.Set<T>();
+        _penAppDbContext.Database.EnsureCreated();
     }
 
     public IEnumerable<T> GetAll()

@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
-using PenApp.Data.Entities;
-using PenApp.Data.Repositories;
+using PenApp.DataAccess.Data.Entities;
+using PenApp.DataAccess.Data.Repositories;
 using System.Xml;
 
 
-namespace PenApp.Data.Repositories.Extensions
+namespace PenApp.DataAccess.Data.Repositories.Extensions
 {
     public static class RepositoryExtensions
     {

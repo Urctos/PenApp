@@ -1,38 +1,33 @@
 ﻿using PenApp.Components.CsvReader;
-using PenApp.Components.UserComunication;
-using PenApp.Data;
-using PenApp.Data.Entities;
+using PenApp.DataAccess.Data.Entities;
+using PenApp.DataAccess.Data.Repositories;
 
-namespace PenApp;
+namespace PenApp.Components.DataBaseComunication;
 
-public class App : IApp
-{
+public class InsertDataManager : IInsertDataManager
+{ 
+    private readonly IRepository<Pen> _penRepository;
+    private readonly IRepository<FountainPen> _fountainPenrepository;
     private readonly ICsvReader _csvReader;
-    private readonly IUserComunication _userComunication;
-    private readonly PenAppDbContext _penAppDbContext;
-    public App(ICsvReader csvReader, IUserComunication userComunication, PenAppDbContext penAppDbContext)
+   
+
+    public InsertDataManager(ICsvReader csvReader, IRepository<Pen> penRepository
+    , IRepository<FountainPen> fountainPenRepository)
     {
         _csvReader = csvReader;
-        _userComunication = userComunication;
-        _penAppDbContext = penAppDbContext;
-        _penAppDbContext.Database.EnsureCreated();
-    }
-
-    public void Run()
-    {
-        //InsertData(); 
-        _userComunication.Comunication();
+        _penRepository = penRepository;
+        _fountainPenrepository = fountainPenRepository;
+        
     }
 
 
-
-    private void InsertData()
+    public void InsertData()
     {
         var pens = _csvReader.ProcessPenFromCsv("Resources\\Files\\pen.csv");
 
         foreach (var pen in pens)
         {
-            _penAppDbContext.Pens.Add(new Pen()
+            _penRepository.Add(new Pen()
             {
                 Name = pen.Name,
                 Brand = pen.Brand,
@@ -41,13 +36,14 @@ public class App : IApp
                 TotalSales = pen.TotalSales
             });
         }
+        _penRepository.Save();
 
         var foutainPens = _csvReader.ProcessFountainPenFromCsv("Resources\\Files\\foutainPen.csv");
 
         foreach (var fountainPen in foutainPens)
         {
-            _penAppDbContext.FountainPens.Add(new FountainPen()
-            { 
+            _fountainPenrepository.Add(new FountainPen()
+            {
                 Name = fountainPen.Name,
                 Brand = fountainPen.Brand,
                 Color = fountainPen.Color,
@@ -55,7 +51,7 @@ public class App : IApp
                 TotalSales = fountainPen.TotalSales
             });
         }
-        _penAppDbContext.SaveChanges();
+        _fountainPenrepository.Save();
     }
 }
 

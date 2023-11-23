@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace PenApp.Data.Entities
+﻿namespace PenApp.DataAccess.Data.Entities
 {
     public class Pen : EntityBase, IEditable, IItemWithPrice
     {
@@ -10,7 +8,6 @@ namespace PenApp.Data.Entities
 
         public Pen(string Name)
         {
-
         }
 
         public string? Name { get; set; }
