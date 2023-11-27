@@ -1,8 +1,4 @@
-﻿using PenApp.Components.CsvReader;
-using PenApp.Components.DataBaseComunication;
-using PenApp.DataAccess.Data.Entities;
-using PenApp.DataAccess.Data.Repositories;
-using PenApp.UI.Services;
+﻿using PenApp.UI.Services;
 
 namespace PenApp.UI;
 
