@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using PenApp.Components.DataBaseComunication;
-using PenApp.Data;
+﻿using PenApp.Components.DataBaseComunication;
 using PenApp.DataAccess.Data.Entities;
 using PenApp.DataAccess.Data.Repositories;
 
